@@ -361,6 +361,3 @@ poetry run pytest
 4. Push to the branch
 5. Create a Pull Request
 
-## License
-
-[Add your license information here] 
