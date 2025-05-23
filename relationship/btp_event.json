@@ -1,0 +1,200 @@
+{
+	"schema": {
+	  "tables": {
+		"systems": {
+		  "description": "Stores system information",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Unique identifier for the system"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Reference to the data source"
+			}
+		  }
+		},
+		"data_flows": {
+		  "description": "Manages data flow configurations",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Unique identifier for the data flow"
+			},
+			"name": {
+			  "type": "string",
+			  "description": "Name of the data flow"
+			},
+			"sender_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "System sending the data"
+			},
+			"receiver_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "System receiving the data"
+			}
+		  }
+		},
+		"inventories": {
+		  "description": "Inventory tracking system",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Unique identifier for inventory"
+			},
+			"object_id": {
+			  "type": "string",
+			  "description": "Object identifier"
+			},
+			"object_url": {
+			  "type": "string",
+			  "description": "URL reference to the object"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			},
+			"sender_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Sending system"
+			},
+			"receiver_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Receiving system"
+			}
+		  }
+		},
+		"properties": {
+		  "description": "Property configurations",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Unique identifier for property"
+			},
+			"data_flow_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_flows",
+				"field": "id"
+			  },
+			  "description": "Associated data flow"
+			},
+			"inventory_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "inventories",
+				"field": "id"
+			  },
+			  "description": "Associated inventory"
+			},
+			"type_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "property_types",
+				"field": "id"
+			  },
+			  "description": "Type of property"
+			},
+			"system_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Associated system"
+			}
+		  }
+		},
+		"btp_event_mesh_queues": {
+		  "description": "BTP event mesh queue configurations",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Unique identifier for queue"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			}
+		  }
+		},
+		"btp_event_mesh_topics": {
+		  "description": "BTP event mesh topic configurations",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Unique identifier for topic"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			}
+		  }
+		}
+	  },
+	  "common_queries": {
+		"flow_between_systems": {
+		  "description": "Find data flows between specific systems",
+		  "tables": ["data_flows", "systems"],
+		  "joins": [
+			{
+			  "from": "data_flows.sender_id",
+			  "to": "systems.id"
+			},
+			{
+			  "from": "data_flows.receiver_id",
+			  "to": "systems.id"
+			}
+		  ]
+		},
+		"system_properties": {
+		  "description": "Get properties for a specific system",
+		  "tables": ["properties", "systems"],
+		  "joins": [
+			{
+			  "from": "properties.system_id",
+			  "to": "systems.id"
+			}
+		  ]
+		}
+	  }
+	}
+  }

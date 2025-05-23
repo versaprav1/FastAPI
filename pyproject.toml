@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fast-api"
+version = "0.1.0"
+description = "FastAPI application for interface data"
+authors = ["Praveen <versaprav@gmail.com>"]
+
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.2"
+psycopg2-binary = "^2.9.10"
+sqlalchemy = "^2.0.25"
+pydantic-settings = "^2.1.0"
+sqlacodegen = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,186 @@
+{
+  "tables": {
+    "azure_api_management_services": {
+      "fields": {
+        "id": "Primary Key",
+        "resource_group_id": {
+          "type": "Foreign Key",
+          "references": "azure_resource_groups.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_api_management_apis": {
+      "fields": {
+        "id": "Primary Key",
+        "create_time": "Timestamp",
+        "change_time": "Timestamp",
+        "name": "String",
+        "location": "String",
+        "service_url": "URL",
+        "service_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_services.id"
+        },
+        "resource_group_id": {
+          "type": "Foreign Key",
+          "references": "azure_resource_groups.id"
+        }
+      }
+    },
+    "azure_resource_groups": {
+      "fields": {
+        "id": "Primary Key",
+        "subscription_id": {
+          "type": "Foreign Key",
+          "references": "azure_subscriptions.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_api_management_api_revisions": {
+      "fields": {
+        "id": "Primary Key",
+        "api_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_apis.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_api_management_api_products": {
+      "fields": {
+        "azure_api_management_api_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_apis.id"
+        },
+        "azure_api_management_product_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_products.id"
+        }
+      }
+    },
+    "azure_api_management_api_operations": {
+      "fields": {
+        "id": "Primary Key",
+        "api": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_apis.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_api_management_products": {
+      "fields": {
+        "id": "Primary Key",
+        "service_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_services.id"
+        },
+        "resource_group_id": {
+          "type": "Foreign Key",
+          "references": "azure_resource_groups.id"
+        }
+      }
+    },
+    "azure_api_management_api_operation_replies": {
+      "fields": {
+        "id": "Primary Key",
+        "operation_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_api_operations.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_api_management_api_operation_parameters": {
+      "fields": {
+        "id": "Primary Key",
+        "operation_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_api_operations.id"
+        },
+        "response_id": {
+          "type": "Foreign Key",
+          "references": "azure_api_management_api_operation_replies.id"
+        },
+        "data_source_id_id": "Foreign Key"
+      }
+    }
+  },
+  "relationships": [
+    {
+      "from": "azure_api_management_services.resource_group_id",
+      "to": "azure_resource_groups.id",
+      "type": "Many-to-One",
+      "description": "Links API management services to a specific resource group"
+    },
+    {
+      "from": "azure_api_management_apis.service_id",
+      "to": "azure_api_management_services.id",
+      "type": "Many-to-One",
+      "description": "Associates APIs with a management service"
+    },
+    {
+      "from": "azure_api_management_apis.resource_group_id",
+      "to": "azure_resource_groups.id",
+      "type": "Many-to-One",
+      "description": "Links APIs to a specific resource group"
+    },
+    {
+      "from": "azure_api_management_api_revisions.api_id",
+      "to": "azure_api_management_apis.id",
+      "type": "Many-to-One",
+      "description": "Links API revisions to specific APIs"
+    },
+    {
+      "from": "azure_api_management_api_products.azure_api_management_api_id",
+      "to": "azure_api_management_apis.id",
+      "type": "Many-to-One",
+      "description": "Associates products with specific APIs"
+    },
+    {
+      "from": "azure_api_management_api_products.azure_api_management_product_id",
+      "to": "azure_api_management_products.id",
+      "type": "Many-to-One",
+      "description": "Links API products to specific products"
+    },
+    {
+      "from": "azure_api_management_api_operations.api",
+      "to": "azure_api_management_apis.id",
+      "type": "Many-to-One",
+      "description": "Links API operations to specific APIs"
+    },
+    {
+      "from": "azure_api_management_products.resource_group_id",
+      "to": "azure_resource_groups.id",
+      "type": "Many-to-One",
+      "description": "Links products to specific resource groups"
+    },
+    {
+      "from": "azure_api_management_products.service_id",
+      "to": "azure_api_management_services.id",
+      "type": "Many-to-One",
+      "description": "Associates products with specific API management services"
+    },
+    {
+      "from": "azure_api_management_api_operation_replies.operation_id",
+      "to": "azure_api_management_api_operations.id",
+      "type": "Many-to-One",
+      "description": "Links operation replies to specific API operations"
+    },
+    {
+      "from": "azure_api_management_api_operation_parameters.operation_id",
+      "to": "azure_api_management_api_operations.id",
+      "type": "Many-to-One",
+      "description": "Links operation parameters to specific API operations"
+    },
+    {
+      "from": "azure_api_management_api_operation_parameters.response_id",
+      "to": "azure_api_management_api_operation_replies.id",
+      "type": "Many-to-One",
+      "description": "Links operation parameters to specific operation replies"
+    }
+  ]
+}
+

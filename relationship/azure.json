@@ -1,0 +1,65 @@
+{
+  "tables": {
+    "azure_tenants": {
+      "fields": {
+        "id": {
+          "type": "Primary Key",
+          "description": "Unique identifier for each tenant"
+        },
+        "data_source_id": {
+          "type": "Foreign Key",
+          "references": "data_sources.id",
+          "description": "Links each tenant to a data source"
+        }
+      }
+    },
+    "azure_subscriptions": {
+      "fields": {
+        "id": {
+          "type": "Primary Key",
+          "description": "Unique identifier for each subscription"
+        },
+        "tenant_id": {
+          "type": "Foreign Key",
+          "references": "azure_tenants.id",
+          "description": "Links each subscription to a specific tenant"
+        }
+      }
+    },
+    "data_sources": {
+      "fields": {
+        "id": {
+          "type": "Primary Key",
+          "description": "Unique identifier for each data source"
+        },
+        "hostname": {
+          "type": "String",
+          "description": "Hostname of the data source"
+        },
+        "system_id": {
+          "type": "Foreign Key",
+          "description": "Potentially links to a broader system associated with the data source"
+        },
+        "proxy_id": {
+          "type": "Foreign Key",
+          "description": "Potentially links to a proxy service or intermediary layer"
+        }
+      }
+    }
+  },
+  "relationships": [
+    {
+      "from": "azure_tenants.data_source_id",
+      "to": "data_sources.id",
+      "type": "One-to-One",
+      "description": "Each tenant links to a specific data source"
+    },
+    {
+      "from": "azure_subscriptions.tenant_id",
+      "to": "azure_tenants.id",
+      "type": "Many-to-One",
+      "description": "Each subscription belongs to a single tenant"
+    }
+  ]
+}
+

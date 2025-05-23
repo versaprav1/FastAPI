@@ -1,0 +1,140 @@
+{
+  "services": {
+    "EventGrid": {
+      "tables": {
+        "azure_event_grid_topics": {
+          "fields": {
+            "id": "Primary Key",
+            "resource_group_id": {
+              "type": "Foreign Key",
+              "references": "azure_resource_groups.id"
+            }
+          }
+        },
+        "azure_event_grid_domains": {
+          "fields": {
+            "id": "Primary Key",
+            "resource_group_id": {
+              "type": "Foreign Key",
+              "references": "azure_resource_groups.id"
+            }
+          }
+        },
+        "azure_event_grid_partner_namespaces": {
+          "fields": {
+            "id": "Primary Key",
+            "resource_group_id": {
+              "type": "Foreign Key",
+              "references": "azure_resource_groups.id"
+            },
+            "data_source_id": "Foreign Key"
+          }
+        },
+        "azure_event_grid_partner_topics": {
+          "fields": {
+            "id": "Primary Key",
+            "resource_group_id": {
+              "type": "Foreign Key",
+              "references": "azure_resource_groups.id"
+            }
+          }
+        },
+        "azure_event_grid_partner_registrations": {
+          "fields": {
+            "id": "Primary Key",
+            "resource_group_id": {
+              "type": "Foreign Key",
+              "references": "azure_resource_groups.id"
+            }
+          }
+        },
+        "azure_event_grid_system_topics": {
+          "fields": {
+            "id": "Primary Key",
+            "resource_group_id": {
+              "type": "Foreign Key",
+              "references": "azure_resource_groups.id"
+            }
+          }
+        },
+        "azure_event_grid_partner_namespace_channels": {
+          "fields": {
+            "id": "Primary Key",
+            "namespace_id": {
+              "type": "Foreign Key",
+              "references": "azure_event_grid_partner_namespaces.id"
+            }
+          }
+        },
+        "azure_event_grid_event_subscriptions": {
+          "fields": {
+            "id": "Primary Key",
+            "azure_event_grid_domain_event_subscriptions": "Foreign Key",
+            "azure_event_grid_domain_topic_event_subscriptions": "Foreign Key",
+            "azure_event_grid_partner_topic_event_subscriptions": "Foreign Key",
+            "azure_event_grid_system_topic_event_subscriptions": "Foreign Key",
+            "azure_event_grid_topic_event_subscriptions": "Foreign Key",
+            "resource_group_id": {
+              "type": "Foreign Key",
+              "references": "azure_resource_groups.id"
+            }
+          }
+        },
+        "azure_event_grid_domain_topics": {
+          "fields": {
+            "id": "Primary Key",
+            "domain_id": {
+              "type": "Foreign Key",
+              "references": "azure_event_grid_domains.id"
+            }
+          }
+        }
+      },
+      "relationships": [
+        {
+          "from": "azure_event_grid_topics.resource_group_id",
+          "to": "azure_resource_groups.id",
+          "type": "Many-to-One",
+          "description": "Links Event Grid topics to resource groups"
+        },
+        {
+          "from": "azure_event_grid_domains.resource_group_id",
+          "to": "azure_resource_groups.id",
+          "type": "Many-to-One",
+          "description": "Links Event Grid domains to resource groups"
+        },
+        {
+          "from": "azure_event_grid_partner_namespaces.resource_group_id",
+          "to": "azure_resource_groups.id",
+          "type": "Many-to-One",
+          "description": "Links partner namespaces to resource groups"
+        },
+        {
+          "from": "azure_event_grid_partner_topics.resource_group_id",
+          "to": "azure_resource_groups.id",
+          "type": "Many-to-One",
+          "description": "Links partner topics to resource groups"
+        },
+        {
+          "from": "azure_event_grid_partner_namespace_channels.namespace_id",
+          "to": "azure_event_grid_partner_namespaces.id",
+          "type": "Many-to-One",
+          "description": "Links namespace channels to partner namespaces"
+        },
+        {
+          "from": "azure_event_grid_event_subscriptions.resource_group_id",
+          "to": "azure_resource_groups.id",
+          "type": "Many-to-One",
+          "description": "Links event subscriptions to resource groups"
+        },
+        {
+          "from": "azure_event_grid_domain_topics.domain_id",
+          "to": "azure_event_grid_domains.id",
+          "type": "Many-to-One",
+          "description": "Links domain topics to Event Grid domains"
+        }
+      ]
+    }
+  }
+}
+

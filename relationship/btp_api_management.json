@@ -1,0 +1,115 @@
+{
+	"tables": [
+	  {
+		"name": "systems",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "data_sources",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "hostname", "type": "string" },
+		  { "name": "system_id", "type": "integer", "key": "Foreign Key", "references": { "table": "systems", "field": "id" } },
+		  { "name": "proxy_id", "type": "integer", "key": "Foreign Key", "references": { "table": "btp_api_management_proxies", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "btp_api_management_providers",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "btp_api_management_proxy_products",
+		"fields": [
+		  { "name": "btp_api_management_proxy_id", "type": "integer", "key": "Foreign Key", "references": { "table": "btp_api_management_proxies", "field": "id" } },
+		  { "name": "btp_api_management_product_id", "type": "integer", "key": "Foreign Key", "references": { "table": "btp_api_management_products", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "properties",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "data_flow_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_flows", "field": "id" } },
+		  { "name": "inventory_id", "type": "integer", "key": "Foreign Key", "references": { "table": "inventories", "field": "id" } },
+		  { "name": "type_id", "type": "integer", "key": "Foreign Key", "references": { "table": "property_types", "field": "id" } },
+		  { "name": "system_id", "type": "integer", "key": "Foreign Key", "references": { "table": "systems", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "property_types",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "name", "type": "string" }
+		]
+	  },
+	  {
+		"name": "metadata",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "inventory_id", "type": "integer", "key": "Foreign Key", "references": { "table": "inventories", "field": "id" } },
+		  { "name": "system_id", "type": "integer", "key": "Foreign Key", "references": { "table": "systems", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "inventories",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "object_id", "type": "string" },
+		  { "name": "object_url", "type": "string" },
+		  { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } },
+		  { "name": "sender_id", "type": "integer" },
+		  { "name": "receiver_id", "type": "integer" }
+		]
+	  },
+	  {
+		"name": "system_mappings",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "target_system:id", "type": "integer", "key": "Foreign Key", "references": { "table": "systems", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "data_flows",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "name", "type": "string" },
+		  { "name": "sender_id", "type": "integer" },
+		  { "name": "receiver_id", "type": "integer" }
+		]
+	  },
+	  {
+		"name": "btp_api_management_proxies",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "btp_api_management_products",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "btp_api_management_product_rate_plans",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "product_id", "type": "integer", "key": "Foreign Key", "references": { "table": "btp_api_management_products", "field": "id" } }
+		]
+	  },
+	  {
+		"name": "btp_api_management_product_applications",
+		"fields": [
+		  { "name": "id", "type": "integer", "key": "Primary Key" },
+		  { "name": "product_id", "type": "integer", "key": "Foreign Key", "references": { "table": "btp_api_management_products", "field": "id" } }
+		]
+	  }
+	]
+  }
+  

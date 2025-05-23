@@ -1,0 +1,222 @@
+{
+	"schema": {
+	  "tables": {
+		"systems": {
+		  "description": "Core system information",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "System identifier"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			}
+		  }
+		},
+		"data_sources": {
+		  "description": "Data source configuration",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Data source identifier"
+			},
+			"hostname": {
+			  "type": "string",
+			  "description": "Host name"
+			},
+			"system_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Associated system"
+			},
+			"proxy_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Proxy system reference"
+			}
+		  }
+		},
+		"inventories": {
+		  "description": "Inventory tracking",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Inventory identifier"
+			},
+			"create_time": {
+			  "type": "timestamp",
+			  "description": "Creation timestamp"
+			},
+			"change_time": {
+			  "type": "timestamp",
+			  "description": "Last modification time"
+			},
+			"vendor": {
+			  "type": "string",
+			  "description": "Vendor information"
+			},
+			"type": {
+			  "type": "string",
+			  "description": "Inventory type"
+			},
+			"name": {
+			  "type": "string",
+			  "description": "Inventory name"
+			},
+			"description": {
+			  "type": "string",
+			  "description": "Description"
+			},
+			"object_id": {
+			  "type": "string",
+			  "description": "Object identifier"
+			},
+			"object_url": {
+			  "type": "string",
+			  "description": "Object URL"
+			},
+			"object_args": {
+			  "type": "string",
+			  "description": "Object arguments"
+			},
+			"sender_name": {
+			  "type": "string",
+			  "description": "Sender name"
+			},
+			"receiver_name": {
+			  "type": "string",
+			  "description": "Receiver name"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			},
+			"sender_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Sender system"
+			},
+			"receiver_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Receiver system"
+			}
+		  }
+		},
+		"data_flows": {
+		  "description": "Data flow configuration",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Flow identifier"
+			},
+			"name": {
+			  "type": "string",
+			  "description": "Flow name"
+			},
+			"sender_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Sender system"
+			},
+			"receiver_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "systems",
+				"field": "id"
+			  },
+			  "description": "Receiver system"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			}
+		  }
+		},
+		"btp_cloud_integration_messages": {
+		  "description": "BTP integration messages",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Message identifier"
+			},
+			"artefact": {
+			  "type": "string",
+			  "description": "Artefact information"
+			},
+			"correlation": {
+			  "type": "string",
+			  "description": "Correlation identifier"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			}
+		  }
+		}
+	  },
+	  "common_queries": {
+		"flow_analysis": {
+		  "description": "Analyze data flows between systems",
+		  "tables": ["data_flows", "systems"],
+		  "joins": [
+			{
+			  "from": "data_flows.sender_id",
+			  "to": "systems.id"
+			},
+			{
+			  "from": "data_flows.receiver_id",
+			  "to": "systems.id"
+			}
+		  ]
+		},
+		"message_tracking": {
+		  "description": "Track BTP integration messages",
+		  "tables": ["btp_cloud_integration_messages", "btp_cloud_integration_artefacts"],
+		  "joins": [
+			{
+			  "from": "btp_cloud_integration_messages.artefact",
+			  "to": "btp_cloud_integration_artefacts.id"
+			}
+		  ]
+		}
+	  }
+	}
+  }

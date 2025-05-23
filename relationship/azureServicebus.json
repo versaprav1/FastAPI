@@ -1,0 +1,74 @@
+{
+    "tables": [
+      {
+        "name": "azure_resource_groups",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "subscription_id", "type": "integer", "key": "Foreign Key", "references": { "table": "subscriptions", "field": "id" } },
+          { "name": "data_source_id", "type": "integer" }
+        ]
+      },
+      {
+        "name": "azure_service_bus_topics",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "resource_group_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_resource_groups", "field": "id" } },
+          { "name": "namespace_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_service_bus_namespaces", "field": "id" } }
+        ]
+      },
+      {
+        "name": "azure_service_bus_topic_subscriptions",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "topic_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_service_bus_topics", "field": "id" } }
+        ]
+      },
+      {
+        "name": "azure_event_grid_partner_namespaces",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "resource_group_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_resource_groups", "field": "id" } },
+          { "name": "data_source_id", "type": "integer" }
+        ]
+      },
+      {
+        "name": "azure_service_bus_queues",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "namespace_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_service_bus_namespaces", "field": "id" } },
+          { "name": "resource_group_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_resource_groups", "field": "id" } }
+        ]
+      },
+      {
+        "name": "azure_service_bus_topic_subscription_rules",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "subscription_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_service_bus_topic_subscriptions", "field": "id" } }
+        ]
+      },
+      {
+        "name": "azure_event_grid_partner_namespace_channels",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "namespace_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_event_grid_partner_namespaces", "field": "id" } }
+        ]
+      },
+      {
+        "name": "azure_service_bus_namespaces",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "resource_group_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_resource_groups", "field": "id" } }
+        ]
+      },
+      {
+        "name": "azure_service_bus_authorization_rules",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "namespace_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_service_bus_namespaces", "field": "id" } },
+          { "name": "queue_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_service_bus_queues", "field": "id" } },
+          { "name": "topic_id", "type": "integer", "key": "Foreign Key", "references": { "table": "azure_service_bus_topics", "field": "id" } }
+        ]
+      }
+    ]
+  }
+  

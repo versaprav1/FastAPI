@@ -1,0 +1,204 @@
+{
+	"schema": {
+	  "tables": {
+		"systems": {
+		  "description": "Core systems information",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Unique system identifier"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Reference to data source"
+			}
+		  }
+		},
+		"btp_cloud_integration_packages": {
+		  "description": "Integration packages configuration",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Package identifier"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Associated data source"
+			}
+		  }
+		},
+		"btp_cloud_integration_artefacts": {
+		  "description": "Integration artefacts",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Artefact identifier"
+			},
+			"runtime_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "btp_cloud_integration_runtime_artefacts",
+				"field": "id"
+			  },
+			  "description": "Runtime reference"
+			},
+			"package_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "btp_cloud_integration_packages",
+				"field": "id"
+			  },
+			  "description": "Package reference"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Data source reference"
+			}
+		  }
+		},
+		"btp_cloud_integration_connections": {
+		  "description": "Integration connections",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Connection identifier"
+			},
+			"address": {
+			  "type": "string",
+			  "description": "Connection address"
+			},
+			"credential_name": {
+			  "type": "string",
+			  "description": "Name of credentials"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Data source reference"
+			},
+			"credential_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "btp_cloud_integration_credentials",
+				"field": "id"
+			  },
+			  "description": "Credential reference"
+			},
+			"participant_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "btp_cloud_integration_participants",
+				"field": "id"
+			  },
+			  "description": "Participant reference"
+			}
+		  }
+		},
+		"btp_cloud_integration_messages": {
+		  "description": "Integration messages",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Message identifier"
+			},
+			"correlation": {
+			  "type": "string",
+			  "description": "Message correlation"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Data source reference"
+			}
+		  }
+		},
+		"btp_tenants": {
+		  "description": "BTP tenant information",
+		  "fields": {
+			"id": {
+			  "type": "integer",
+			  "primary_key": true,
+			  "description": "Tenant identifier"
+			},
+			"product": {
+			  "type": "string",
+			  "description": "Product name"
+			},
+			"region": {
+			  "type": "string",
+			  "description": "Tenant region"
+			},
+			"data_source_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "data_sources",
+				"field": "id"
+			  },
+			  "description": "Data source reference"
+			},
+			"property_key_id": {
+			  "type": "integer",
+			  "foreign_key": {
+				"references": "property_types",
+				"field": "id"
+			  },
+			  "description": "Property key reference"
+			}
+		  }
+		}
+	  },
+	  "common_queries": {
+		"message_trace": {
+		  "description": "Trace message flow with properties and attachments",
+		  "tables": ["btp_cloud_integration_messages", "btp_cloud_integration_message_properties", "btp_cloud_integration_message_attachments"],
+		  "joins": [
+			{
+			  "from": "btp_cloud_integration_message_properties.message_id",
+			  "to": "btp_cloud_integration_messages.id"
+			},
+			{
+			  "from": "btp_cloud_integration_message_attachments.message_id",
+			  "to": "btp_cloud_integration_messages.id"
+			}
+		  ]
+		},
+		"connection_security": {
+		  "description": "View connection security details",
+		  "tables": ["btp_cloud_integration_connections", "btp_cloud_integration_credentials", "btp_cloud_integration_oauth2credentials"],
+		  "joins": [
+			{
+			  "from": "btp_cloud_integration_connections.credential_id",
+			  "to": "btp_cloud_integration_credentials.id"
+			},
+			{
+			  "from": "btp_cloud_integration_oauth2credentials.credential_id",
+			  "to": "btp_cloud_integration_credentials.id"
+			}
+		  ]
+		}
+	  }
+	}
+  }

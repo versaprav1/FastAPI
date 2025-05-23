@@ -1,0 +1,221 @@
+{
+  "tables": {
+    "azure_logic_app_workflows": {
+      "fields": {
+        "id": "Primary Key",
+        "resource_group_id": {
+          "type": "Foreign Key",
+          "references": "azure_resource_groups.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_resource_groups": {
+      "fields": {
+        "id": "Primary Key",
+        "subscription_id": {
+          "type": "Foreign Key",
+          "references": "azure_subscriptions.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_logic_app_workflow_versions": {
+      "fields": {
+        "id": "Primary Key",
+        "workflow_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_workflows.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_logic_app_integration_accounts": {
+      "fields": {
+        "id": "Primary Key",
+        "resource_group_id": {
+          "type": "Foreign Key",
+          "references": "azure_resource_groups.id"
+        }
+      }
+    },
+    "azure_logic_app_integration_account_sessions": {
+      "fields": {
+        "id": "Primary Key",
+        "account_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_accounts.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_logic_app_integration_account_schemas": {
+      "fields": {
+        "id": "Primary Key",
+        "account_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_accounts.id"
+        },
+        "data_source_id": "Foreign Key"
+      }
+    },
+    "azure_logic_app_integration_account_partners": {
+      "fields": {
+        "id": "Primary Key",
+        "account_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_accounts.id"
+        }
+      }
+    },
+    "azure_logic_app_integration_account_partner_metadata": {
+      "fields": {
+        "id": "Primary Key",
+        "partner_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_account_partners.id"
+        }
+      }
+    },
+    "azure_logic_app_integration_account_partner_identities": {
+      "fields": {
+        "id": "Primary Key",
+        "qualifier": "String",
+        "partner_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_account_partners.id"
+        }
+      }
+    },
+    "azure_logic_app_integration_account_maps": {
+      "fields": {
+        "id": "Primary Key",
+        "account_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_accounts.id"
+        }
+      }
+    },
+    "azure_logic_app_integration_account_certificates": {
+      "fields": {
+        "id": "Primary Key",
+        "account_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_accounts.id"
+        }
+      }
+    },
+    "azure_logic_app_integration_account_agreements": {
+      "fields": {
+        "id": "Primary Key",
+        "host_partner_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_account_partners.id"
+        },
+        "guest_partner_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_account_partners.id"
+        },
+        "account_id": {
+          "type": "Foreign Key",
+          "references": "azure_logic_app_integration_accounts.id"
+        }
+      }
+    },
+    "azure_standard_apps": {
+      "fields": {
+        "id": "Primary Key",
+        "resource_group_id": {
+          "type": "Foreign Key",
+          "references": "azure_resource_groups.id"
+        }
+      }
+    },
+    "azure_standard_app_workflows": {
+      "fields": {
+        "app_id": "Primary Key"
+      }
+    }
+  },
+  "relationships": [
+    {
+      "from": "azure_logic_app_workflows.resource_group_id",
+      "to": "azure_resource_groups.id",
+      "type": "One-to-One",
+      "description": "Links a workflow to a specific resource group"
+    },
+    {
+      "from": "azure_resource_groups.subscription_id",
+      "to": "azure_subscriptions.id",
+      "type": "Many-to-One",
+      "description": "Associates resource groups with subscriptions"
+    },
+    {
+      "from": "azure_logic_app_workflow_versions.workflow_id",
+      "to": "azure_logic_app_workflows.id",
+      "type": "Many-to-One",
+      "description": "Links versions to specific workflows"
+    },
+    {
+      "from": "azure_logic_app_integration_accounts.resource_group_id",
+      "to": "azure_resource_groups.id",
+      "type": "One-to-One",
+      "description": "Links integration accounts to resource groups"
+    },
+    {
+      "from": "azure_logic_app_integration_account_sessions.account_id",
+      "to": "azure_logic_app_integration_accounts.id",
+      "type": "Many-to-One",
+      "description": "Links sessions to integration accounts"
+    },
+    {
+      "from": "azure_logic_app_integration_account_schemas.account_id",
+      "to": "azure_logic_app_integration_accounts.id",
+      "type": "Many-to-One",
+      "description": "Links schemas to integration accounts"
+    },
+    {
+      "from": "azure_logic_app_integration_account_partners.account_id",
+      "to": "azure_logic_app_integration_accounts.id",
+      "type": "Many-to-One",
+      "description": "Links partners to integration accounts"
+    },
+    {
+      "from": "azure_logic_app_integration_account_partner_metadata.partner_id",
+      "to": "azure_logic_app_integration_account_partners.id",
+      "type": "Many-to-One",
+      "description": "Links partner metadata to specific partners"
+    },
+    {
+      "from": "azure_logic_app_integration_account_partner_identities.partner_id",
+      "to": "azure_logic_app_integration_account_partners.id",
+      "type": "Many-to-One",
+      "description": "Links partner identities to specific partners"
+    },
+    {
+      "from": "azure_logic_app_integration_account_maps.account_id",
+      "to": "azure_logic_app_integration_accounts.id",
+      "type": "Many-to-One",
+      "description": "Links maps to integration accounts"
+    },
+    {
+      "from": "azure_logic_app_integration_account_certificates.account_id",
+      "to": "azure_logic_app_integration_accounts.id",
+      "type": "Many-to-One",
+      "description": "Links certificates to integration accounts"
+    },
+    {
+      "from": "azure_logic_app_integration_account_agreements.account_id",
+      "to": "azure_logic_app_integration_accounts.id",
+      "type": "Many-to-One",
+      "description": "Links agreements to integration accounts"
+    },
+    {
+      "from": "azure_standard_apps.resource_group_id",
+      "to": "azure_resource_groups.id",
+      "type": "One-to-One",
+      "description": "Links standard apps to resource groups"
+    }
+  ]
+}
+

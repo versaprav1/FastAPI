@@ -1,0 +1,208 @@
+{
+    "schema": {
+      "tables": {
+        "inventories": {
+          "description": "Core inventory information",
+          "fields": {
+            "id": {
+              "type": "integer",
+              "primary_key": true,
+              "description": "Unique inventory identifier"
+            },
+            "create_time": {
+              "type": "timestamp",
+              "description": "Creation timestamp"
+            },
+            "change_time": {
+              "type": "timestamp",
+              "description": "Last modification timestamp"
+            },
+            "vendor": {
+              "type": "string",
+              "description": "Vendor information"
+            },
+            "type": {
+              "type": "string",
+              "description": "Inventory type"
+            },
+            "name": {
+              "type": "string",
+              "description": "Inventory name"
+            },
+            "description": {
+              "type": "string",
+              "description": "Inventory description"
+            },
+            "object_id": {
+              "type": "string",
+              "description": "Associated object identifier"
+            },
+            "object_url": {
+              "type": "string",
+              "description": "Object URL reference"
+            },
+            "object_args": {
+              "type": "string",
+              "description": "Object arguments"
+            },
+            "sender_name": {
+              "type": "string",
+              "description": "Sender system name"
+            },
+            "receiver_name": {
+              "type": "string",
+              "description": "Receiver system name"
+            },
+            "data_source_id": {
+              "type": "integer",
+              "foreign_key": {
+                "references": "data_sources",
+                "field": "id"
+              },
+              "description": "Associated data source"
+            },
+            "sender_id": {
+              "type": "integer",
+              "foreign_key": {
+                "references": "systems",
+                "field": "id"
+              },
+              "description": "Sender system reference"
+            },
+            "receiver_id": {
+              "type": "integer",
+              "foreign_key": {
+                "references": "systems",
+                "field": "id"
+              },
+              "description": "Receiver system reference"
+            }
+          }
+        },
+        "inventory_tags": {
+          "description": "Inventory tagging system",
+          "fields": {
+            "id": {
+              "type": "integer",
+              "primary_key": true,
+              "description": "Tag mapping identifier"
+            },
+            "inventory_id": {
+              "type": "integer",
+              "foreign_key": {
+                "references": "inventories",
+                "field": "id"
+              },
+              "description": "Referenced inventory"
+            },
+            "tag_value_id": {
+              "type": "integer",
+              "foreign_key": {
+                "references": "tag_values",
+                "field": "id"
+              },
+              "description": "Associated tag value"
+            }
+          }
+        },
+        "data_objects": {
+          "description": "Data object definitions",
+          "fields": {
+            "id": {
+              "type": "integer",
+              "primary_key": true,
+              "description": "Object identifier"
+            },
+            "name": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "data_source_id": {
+              "type": "integer",
+              "foreign_key": {
+                "references": "data_sources",
+                "field": "id"
+              },
+              "description": "Associated data source"
+            }
+          }
+        },
+        "property_types": {
+          "description": "Property type definitions",
+          "fields": {
+            "id": {
+              "type": "integer",
+              "primary_key": true,
+              "description": "Property type identifier"
+            },
+            "kind": {
+              "type": "string",
+              "description": "Property kind"
+            },
+            "name": {
+              "type": "string",
+              "description": "Property type name"
+            }
+          }
+        }
+      },
+      "common_queries": {
+        "inventory_flow": {
+          "description": "Track inventory flow between systems",
+          "tables": ["inventories", "systems"],
+          "joins": [
+            {
+              "from": "inventories.sender_id",
+              "to": "systems.id"
+            },
+            {
+              "from": "inventories.receiver_id",
+              "to": "systems.id"
+            }
+          ]
+        },
+        "tagged_inventories": {
+          "description": "Find inventories by tags",
+          "tables": ["inventories", "inventory_tags", "tag_values", "tags"],
+          "joins": [
+            {
+              "from": "inventory_tags.inventory_id",
+              "to": "inventories.id"
+            },
+            {
+              "from": "inventory_tags.tag_value_id",
+              "to": "tag_values.id"
+            },
+            {
+              "from": "tag_values.tag_id",
+              "to": "tags.id"
+            }
+          ]
+        },
+        "inventory_objects": {
+          "description": "Get objects associated with inventory",
+          "tables": ["inventories", "inventory_objects", "data_objects"],
+          "joins": [
+            {
+              "from": "inventory_objects.inventory_id",
+              "to": "inventories.id"
+            },
+            {
+              "from": "inventory_objects.data_object_id",
+              "to": "data_objects.id"
+            }
+          ]
+        }
+      },
+      "query_patterns": {
+        "time_based_queries": {
+          "description": "Queries involving creation and modification times",
+          "sample_fields": ["create_time", "change_time"]
+        },
+        "system_flow_analysis": {
+          "description": "Analyze data flow between systems",
+          "relevant_fields": ["sender_id", "receiver_id", "sender_name", "receiver_name"]
+        }
+      }
+    }
+  }

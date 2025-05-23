@@ -1,0 +1,76 @@
+{
+    "tables": [
+      {
+        "name": "systems",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+        ]
+      },
+      {
+        "name": "data_sources",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "hostname", "type": "string" },
+          { "name": "system_id", "type": "integer", "key": "Foreign Key", "references": { "table": "systems", "field": "id" } },
+          { "name": "proxy_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_source_proxies", "field": "id" } }
+        ]
+      },
+      {
+        "name": "data_source_proxies",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "url", "type": "string" },
+          { "name": "authentication", "type": "string" }
+        ]
+      },
+      {
+        "name": "data_source_proxy_headers",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "proxy_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_source_proxies", "field": "id" } }
+        ]
+      },
+      {
+        "name": "data_source_oauth2credentials",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } },
+          { "name": "proxy_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_source_proxies", "field": "id" } }
+        ]
+      },
+      {
+        "name": "data_source_basic_auth_credentials",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } },
+          { "name": "proxy_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_source_proxies", "field": "id" } }
+        ]
+      },
+      {
+        "name": "data_source_api_keys",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+        ]
+      },
+      {
+        "name": "data_source_access_tokens",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+        ]
+      },
+      {
+        "name": "btp_tenants",
+        "fields": [
+          { "name": "id", "type": "integer", "key": "Primary Key" },
+          { "name": "product", "type": "string" },
+          { "name": "region", "type": "string" },
+          { "name": "data_source_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } },
+          { "name": "property_key_id", "type": "integer", "key": "Foreign Key", "references": { "table": "data_sources", "field": "id" } }
+        ]
+      }
+    ]
+  }
+  
